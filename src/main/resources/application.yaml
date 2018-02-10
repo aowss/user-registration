@@ -1,0 +1,15 @@
+server:
+  port: 9000
+  tomcat:
+    basedir: target/tomcat
+    accesslog:
+      enabled: true
+      buffered: false
+      directory: logs
+      pattern: common
+logging:
+  level:
+    api.rogers.com: DEBUG
+service:
+  type:
+    local
