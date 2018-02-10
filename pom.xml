@@ -97,7 +97,7 @@
           </execution>
         </executions>
         <configuration>
-          <repository>rogers-api/usage</repository>
+          <repository>aowss-api/user-registration</repository>
           <!-- Use latest
           <tag>${project.version}</tag>
           -->
