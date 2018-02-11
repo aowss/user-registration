@@ -1,5 +1,8 @@
 package api.aowss.com.representations;
 
+import api.aowss.com.representations.validation.MatchingPasswords;
+import api.aowss.com.representations.validation.ValidEmail;
+import api.aowss.com.representations.validation.ValidPassword;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;

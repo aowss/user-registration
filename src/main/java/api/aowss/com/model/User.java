@@ -1,9 +1,5 @@
 package api.aowss.com.model;
 
-import org.springframework.security.core.Authentication;
-
-import java.util.Optional;
-
 public class User {
 
     private String firstName;

@@ -1,28 +1,32 @@
 package api.aowss.com.representations;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+
+import java.util.Map;
 
 public class Error {
 
     private String code;
 
-    @JsonProperty("codeNasme")
-    private String name;
+    private Map<String, String> details;
 
     public Error() {
     }
 
-    public Error(String code, String name) {
+    public Error(String code, Map<String, String> details) {
         this.code = code;
-        this.name = name;
+        this.details = details;
     }
 
     public String getCode() {
         return code;
     }
 
-    public String getName() {
-        return name;
+    @JsonAnyGetter
+    public Map<String, String> getDetails() {
+        return details;
     }
 
 }

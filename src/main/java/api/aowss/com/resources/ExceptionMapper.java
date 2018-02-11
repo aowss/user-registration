@@ -10,14 +10,18 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @ControllerAdvice
 public class ExceptionMapper extends ResponseEntityExceptionHandler {
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(value = { UserAlreadyExistsException.class })
-    @ResponseBody
-    Error handleNotFound(RuntimeException ex, WebRequest request) {
-        return new Error("code", "desc");
+    @ResponseBody Error handleUserAlreadyExists(RuntimeException ex, WebRequest request) {
+        Map<String, String> details = new HashMap<>();
+        details.put("email", ((UserAlreadyExistsException)ex).getEmail());
+        return new Error("EMAIL_ALREADY_EXISTS", details);
     }
 
 }
