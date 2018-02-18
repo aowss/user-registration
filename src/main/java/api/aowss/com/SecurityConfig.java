@@ -10,14 +10,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.
-                authorizeRequests().
+            authorizeRequests().
                 antMatchers("/user").permitAll().
                 anyRequest().fullyAuthenticated().
-                and().
+            and().
                 httpBasic().
-                and().
+            and().
                 headers().cacheControl().disable(). //  This is needed to allow controllers to set the cache control headers
-                and().
+            and().
                 csrf().disable();
     }
 

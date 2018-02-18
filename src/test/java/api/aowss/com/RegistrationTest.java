@@ -33,7 +33,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-//@ContextConfiguration(classes={ServiceTestConfig.class})
 public class RegistrationTest {
 
     private static final Logger logger = LoggerFactory.getLogger(RegistrationTest.class);

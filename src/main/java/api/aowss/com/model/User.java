@@ -1,10 +1,21 @@
 package api.aowss.com.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "users")
 public class User {
+
+    @Id
+    @Column(unique = true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     private String firstName;
     private String lastName;
     private final String email;
+
+    @Column(length = 60)
     private String password;
 
     public User(String firstName, String lastName, String email, String password) {
@@ -28,6 +39,10 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public Long getId() {
+        return id;
     }
 
 }

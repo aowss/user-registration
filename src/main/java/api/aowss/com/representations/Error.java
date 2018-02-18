@@ -1,26 +1,32 @@
 package api.aowss.com.representations;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 import java.util.Map;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Error {
 
-    private String code;
+    public enum ErrorCode {
+        EMAIL_ALREADY_EXISTS, USER_NOT_FOUND;
+    }
+
+    private ErrorCode code;
 
     private Map<String, String> details;
 
     public Error() {
     }
 
-    public Error(String code, Map<String, String> details) {
+    public Error(ErrorCode code, Map<String, String> details) {
         this.code = code;
         this.details = details;
     }
 
-    public String getCode() {
+    public ErrorCode getCode() {
         return code;
     }
 
