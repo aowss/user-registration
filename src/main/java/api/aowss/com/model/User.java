@@ -13,10 +13,14 @@ public class User {
 
     private String firstName;
     private String lastName;
-    private final String email;
+    private String email;
 
     @Column(length = 60)
     private String password;
+
+    public User() {
+
+    }
 
     public User(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;

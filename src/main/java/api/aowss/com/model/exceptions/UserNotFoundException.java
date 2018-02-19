@@ -2,14 +2,14 @@ package api.aowss.com.model.exceptions;
 
 public class UserNotFoundException extends RuntimeException {
 
-    private String userId;
+    private Long userId;
 
-    public UserNotFoundException(String userId) {
+    public UserNotFoundException(Long userId) {
         super("No user with the following id exists : [ id = " + userId + " ]");
         this.userId = userId;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 

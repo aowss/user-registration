@@ -15,6 +15,6 @@ public interface UserStore extends JpaRepository<User, Long> {
     CompletableFuture<User> findByEmail(String email);
 
     @Async
-    CompletableFuture<User> findById(String id);
+    CompletableFuture<User> findById(Long id);
 
 }

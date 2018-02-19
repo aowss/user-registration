@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.CompletableFuture;
@@ -32,23 +33,23 @@ public class UserResource {
     @ResponseBody
     public CompletableFuture<ResponseEntity<Object>> register(@RequestBody @Valid UserSummary user) {
         return createUserActivity.
-                createUser(user).
-                thenApply(id -> {
-                    try {
-                        return ResponseEntity.created(new URI("/user/" + id)).build();
-                    } catch (URISyntaxException e) {
-                        e.printStackTrace();
-                        return ResponseEntity.created(null).build();
-                    }
-                });
+            createUser(user).
+            thenApply(id -> {
+                try {
+                    return ResponseEntity.created(new URI("/user/" + id)).build();
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                    return ResponseEntity.created(null).build();
+                }
+            });
     }
 
     @RequestMapping(path = "/{userId}", method = RequestMethod.GET)
     @ResponseBody
-    public CompletableFuture<ResponseEntity<Object>> register(String userId) {
+    public CompletableFuture<ResponseEntity<Object>> retrieve(@PathVariable("userId") @NotNull Long userId) {
         return retrieveUserActivity.
-                retrieveUser(userId).
-                thenApply(userRepresentation -> ResponseEntity.ok(userRepresentation));
+            retrieveUser(userId).
+            thenApply(userRepresentation -> ResponseEntity.ok(userRepresentation));
     }
 
 }

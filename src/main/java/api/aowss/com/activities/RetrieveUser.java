@@ -22,7 +22,7 @@ public class RetrieveUser {
     @Inject
     UserService userService;
 
-    public CompletableFuture<UserRepresentation> retrieveUser(String userId) throws UserNotFoundException {
+    public CompletableFuture<UserRepresentation> retrieveUser(Long userId) throws UserNotFoundException {
         return userService.retrieveUser(userId).thenApply(toUserRepresentation);
     }
 

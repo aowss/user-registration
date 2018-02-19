@@ -9,6 +9,6 @@ import java.util.concurrent.CompletableFuture;
 public interface UserService {
 
     CompletableFuture<Long> registerUser(User userSummary) throws UserAlreadyExistsException;
-    CompletableFuture<User> retrieveUser(String userId) throws UserNotFoundException;
+    CompletableFuture<User> retrieveUser(Long userId) throws UserNotFoundException;
 
 }

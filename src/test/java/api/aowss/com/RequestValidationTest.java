@@ -11,9 +11,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.nio.charset.Charset;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -34,13 +36,18 @@ public class RequestValidationTest {
 
     @Test
     public void valid() throws Exception {
-        mockMvc.
+
+        MvcResult result = mockMvc.
             perform(
                 post("/user").
                 contentType(MediaType.APPLICATION_JSON).
-                content("{ \"firstName\": \"Aowss\", \"lastName\": \"Ibrahim\", \"email\": \"aowss@yahoo.com\", \"password\": \"My-Passw0rd\", \"matchingPassword\": \"My-Passw0rd\" }")
-            ).
-            andExpect(status().isOk());
+                content("{ \"firstName\": \"Aowss\", \"lastName\": \"Ibrahim\", \"email\": \"aowss-1@yahoo.com\", \"password\": \"My-Passw0rd\", \"matchingPassword\": \"My-Passw0rd\" }")
+            ).andReturn();
+
+        mockMvc.
+            perform(asyncDispatch(result)).
+            andExpect(status().isCreated());
+
     }
 
     @Test
@@ -61,6 +68,17 @@ public class RequestValidationTest {
                 post("/user").
                 contentType(MediaType.APPLICATION_JSON).
                 content("{ \"lastName\": \"Ibrahim\", \"email\": \"aowss@yahoo.com\", \"password\": \"test\", \"matchingPassword\": \"test\" }")
+            ).
+            andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void missingPasswordProperty() throws Exception {
+        mockMvc.
+            perform(
+                post("/user").
+                contentType(MediaType.APPLICATION_JSON).
+                content("{ \"firstName\": \"Aowss\", \"lastName\": \"Ibrahim\", \"email\": \"aowss@yahoo.com\", \"matchingPassword\": \"test\" }")
             ).
             andExpect(status().isBadRequest());
     }
