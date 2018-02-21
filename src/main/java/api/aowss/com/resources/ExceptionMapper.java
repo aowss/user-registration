@@ -35,7 +35,8 @@ public class ExceptionMapper extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = { UserNotFoundException.class })
     @ResponseBody Error handleUserNotFound(RuntimeException ex, WebRequest request) {
         Map<String, String> details = new HashMap<>();
-        details.put("id", ((UserNotFoundException)ex.getCause()).getUserId() + "");
+        UserNotFoundException exception = ex.getCause() == null ? (UserNotFoundException)ex : (UserNotFoundException)ex.getCause();
+        details.put(exception.getIdType(), exception.getIdValue());
         return new Error(USER_NOT_FOUND, details);
     }
 

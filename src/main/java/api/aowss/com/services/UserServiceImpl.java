@@ -27,9 +27,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CompletableFuture<User> retrieveUser(Long userId) throws UserNotFoundException {
+    public CompletableFuture<User> retrieveUserById(Long userId) throws UserNotFoundException {
         return userStore.findById(userId).thenApply(user -> {
             if (user == null) throw new UserNotFoundException(userId);
+            return user;
+        });
+    }
+
+    @Override
+    public CompletableFuture<User> retrieveUserByEmail(String email) throws UserNotFoundException {
+        return userStore.findByEmail(email).thenApply(user -> {
+            if (user == null) throw new UserNotFoundException("email", email);
             return user;
         });
     }
