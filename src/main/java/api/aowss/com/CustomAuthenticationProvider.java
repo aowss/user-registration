@@ -23,7 +23,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String name = authentication.getName();
         String password = authentication.getCredentials().toString();
 
-        boolean result = authenticateUserActivity.authenticateUser(name, password).join();
+        boolean result = authenticateUserActivity.authenticateUser(name, password).
+            exceptionally(exception -> false).
+            join();
+
         if (result) {
             return new UsernamePasswordAuthenticationToken(name, password, new ArrayList<>());
         } else {

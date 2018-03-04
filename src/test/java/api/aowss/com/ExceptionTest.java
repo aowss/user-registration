@@ -5,26 +5,30 @@ import api.aowss.com.model.exceptions.UserNotFoundException;
 import api.aowss.com.services.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 
 import javax.json.Json;
 import javax.json.JsonObject;
 import java.nio.charset.Charset;
 import java.util.concurrent.CompletionException;
 
+import static api.aowss.com.Utils.perform;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -71,18 +75,35 @@ public class ExceptionTest {
     }
 
     @Test
-    public void wrongId() throws Exception {
+    @WithMockUser(username = "aowss@yahoo.com", password = "My-Passw1rd")
+    public void invalidCredentials() throws Exception {
 
-        when(mockService.retrieveUser(0L)).thenThrow(new CompletionException(new UserNotFoundException(0L)));
+        when(mockService.retrieveUserById(anyLong())).thenCallRealMethod();
 
         mockMvc.
             perform(
                 get("/user/0").
-                accept(MediaType.APPLICATION_JSON)
-            ).andExpect(status().isNotFound())
-            .andExpect(content().contentType(jsonMediaType))
-            .andExpect(jsonPath("code", is("USER_NOT_FOUND")))
-            .andExpect(jsonPath("id", is("0")));
+                contentType(MediaType.APPLICATION_JSON)
+            ).andExpect(status().isUnauthorized());
+
+    }
+
+    @Test
+    @WithMockUser(username = "aowss@yahoo.com", password = "My-Passw0rd")
+    public void wrongId() throws Exception {
+
+        when(mockService.retrieveUserById(0L)).thenThrow(new CompletionException(new UserNotFoundException(0L)));
+
+        ResultActions mvcResult = perform(
+            get("/user/0").
+                accept(MediaType.APPLICATION_JSON),
+            mockMvc
+        );
+
+        mvcResult.andExpect(status().isNotFound())
+                .andExpect(content().contentType(jsonMediaType))
+                .andExpect(jsonPath("code", is("USER_NOT_FOUND")))
+                .andExpect(jsonPath("id", is("0")));
 
     }
 

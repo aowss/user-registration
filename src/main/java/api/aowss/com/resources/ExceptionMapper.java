@@ -4,6 +4,8 @@ import api.aowss.com.model.exceptions.UserAlreadyExistsException;
 import api.aowss.com.model.exceptions.UserNotFoundException;
 import api.aowss.com.representations.Error;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;

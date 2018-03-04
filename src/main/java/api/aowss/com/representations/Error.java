@@ -11,7 +11,9 @@ import java.util.Map;
 public class Error {
 
     public enum ErrorCode {
-        EMAIL_ALREADY_EXISTS, USER_NOT_FOUND, INALID_FORMAT;
+        EMAIL_ALREADY_EXISTS,
+        USER_NOT_FOUND,
+        INALID_FORMAT;
     }
 
     private ErrorCode code;
