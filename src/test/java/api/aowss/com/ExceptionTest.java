@@ -3,6 +3,7 @@ package api.aowss.com;
 import api.aowss.com.model.exceptions.UserAlreadyExistsException;
 import api.aowss.com.model.exceptions.UserNotFoundException;
 import api.aowss.com.services.UserService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -17,6 +18,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -28,6 +31,8 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -45,9 +50,19 @@ public class ExceptionTest {
     private UserService mockService;
 
     @Autowired
+    private WebApplicationContext context;
+
+   // @Autowired
     private MockMvc mockMvc;
 
     private MediaType jsonMediaType = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
+
+    @Before
+    public void setUp() throws Exception {
+        mockMvc = MockMvcBuilders.webAppContextSetup(context)
+                                .apply(springSecurity())
+                                .build();
+    }
 
     @Test
     public void alreadyExistingEmail() throws Exception {
@@ -75,17 +90,13 @@ public class ExceptionTest {
     }
 
     @Test
-    @WithMockUser(username = "aowss@yahoo.com", password = "My-Passw1rd")
     public void invalidCredentials() throws Exception {
-
-        when(mockService.retrieveUserById(anyLong())).thenCallRealMethod();
 
         mockMvc.
             perform(
-                get("/user/0").
+                get("/user/0").with(httpBasic("aowss@yahoo.com", "My-Passw0rd")).
                 contentType(MediaType.APPLICATION_JSON)
             ).andExpect(status().isUnauthorized());
-
     }
 
     @Test
