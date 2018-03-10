@@ -23,6 +23,7 @@ public class UserResource {
 
     @Inject
     CreateUser createUserActivity;
+
     @Inject
     RetrieveUser retrieveUserActivity;
 

@@ -21,6 +21,7 @@ public class RetrieveUser {
     UserService userService;
 
     public CompletableFuture<UserRepresentation> retrieveUser(Long userId) throws UserNotFoundException {
+        //  TODO: Check if this should deal with the status
         return userService.retrieveUserById(userId).thenApply(toUserRepresentation);
     }
 

@@ -39,3 +39,9 @@ Push the image using the following command :
 
 On the build server, stop the running container, remove it, remove the image and create a new image from the saved file using the following command, from the `Development` directory :
 > `docker load --input user-registration.tar`
+
+## Documentation
+
+The Design Documentation is generated from the [`Design.adoc`](./Design.adoc) file using [Asciidoctor](http://asciidoctor.org/)  with the [Diagram Extension](http://asciidoctor.org/docs/asciidoctor-diagram/) :
+
+> `asciidoctor -r asciidoctor-diagram Design.adoc`

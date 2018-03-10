@@ -32,6 +32,14 @@ public class UserServiceImpl implements UserService {
             if (user == null) throw new UserNotFoundException(userId);
             return user;
         });
+        /*
+                CompletableFuture<User> result = new CompletableFuture<>();
+        result.complete(userStore.
+                findById(userId).
+                orElseThrow(() -> new UserNotFoundException(userId)));
+        return result;
+
+         */
     }
 
     @Override

@@ -1,6 +1,7 @@
 package api.aowss.com;
 
 import api.aowss.com.activities.AuthenticateUser;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 import java.util.ArrayList;
 
-@Component
+@Configuration
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     @Inject
@@ -24,6 +25,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String password = authentication.getCredentials().toString();
 
         boolean result = authenticateUserActivity.authenticateUser(name, password).
+            //  TODO: deal with different type of exceptions ( InvalidStatusException ) and return a different message
             exceptionally(exception -> false).
             join();
 

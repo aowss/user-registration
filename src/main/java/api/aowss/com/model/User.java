@@ -18,8 +18,9 @@ public class User {
     @Column(length = 60)
     private String password;
 
-    public User() {
+    private AccountStatus status;
 
+    public User() {
     }
 
     public User(String firstName, String lastName, String email, String password) {
@@ -27,6 +28,7 @@ public class User {
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.status = AccountStatus.CREATED;
     }
 
     public String getFirstName() {
@@ -47,6 +49,10 @@ public class User {
 
     public Long getId() {
         return id;
+    }
+
+    public AccountStatus getStatus() {
+        return status;
     }
 
 }
