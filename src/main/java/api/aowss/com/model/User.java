@@ -23,12 +23,16 @@ public class User {
     public User() {
     }
 
-    public User(String firstName, String lastName, String email, String password) {
+    public User(String firstName, String lastName, String email, String password, AccountStatus status) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.status = AccountStatus.CREATED;
+        this.status = status;
+    }
+
+    public User(String firstName, String lastName, String email, String password) {
+        this(firstName, lastName, email, password, AccountStatus.CREATED);
     }
 
     public String getFirstName() {
@@ -53,6 +57,10 @@ public class User {
 
     public AccountStatus getStatus() {
         return status;
+    }
+
+    public void setStatus(AccountStatus status) {
+        this.status = status;
     }
 
 }

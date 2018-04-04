@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+//  TODO: check if @Async is needed
 @Repository("userRepository")
 public interface UserStore extends JpaRepository<User, Long> {
 
@@ -18,5 +19,9 @@ public interface UserStore extends JpaRepository<User, Long> {
     @Async
     CompletableFuture<User> findById(Long id);
     //Optional<User> findById(Long id);
+
+    @Async
+    //  TODO: make save return a CompletableFuturre
+    User save(User user);
 
 }

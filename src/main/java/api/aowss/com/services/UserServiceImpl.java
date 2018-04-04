@@ -20,10 +20,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public CompletableFuture<Long> registerUser(User userSummary) throws UserAlreadyExistsException {
         return userStore.findByEmail(userSummary.getEmail()).
-            handle( (user, exception) -> {
+            thenApply(user -> {
                 if (user != null) throw new UserAlreadyExistsException(userSummary.getEmail());
-                return userStore.save(userSummary).getId();
-            });
+                return userStore.save(userSummary);
+            }).
+            thenApply(User::getId);
     }
 
     @Override
@@ -32,14 +33,6 @@ public class UserServiceImpl implements UserService {
             if (user == null) throw new UserNotFoundException(userId);
             return user;
         });
-        /*
-                CompletableFuture<User> result = new CompletableFuture<>();
-        result.complete(userStore.
-                findById(userId).
-                orElseThrow(() -> new UserNotFoundException(userId)));
-        return result;
-
-         */
     }
 
     @Override
@@ -48,6 +41,11 @@ public class UserServiceImpl implements UserService {
             if (user == null) throw new UserNotFoundException("email", email);
             return user;
         });
+    }
+
+    @Override
+    public Long updateUser(User user) {
+        return userStore.save(user).getId();
     }
 
 }

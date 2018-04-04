@@ -1,7 +1,5 @@
 package api.aowss.com;
 
-import api.aowss.com.services.UserService;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -32,9 +30,6 @@ public class RegistrationTest {
     private static final Logger logger = LoggerFactory.getLogger(RegistrationTest.class);
 
     @Autowired
-    private UserService mockService;
-
-    @Autowired
     private MockMvc mockMvc;
 
     private MediaType jsonMediaType = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
@@ -43,20 +38,21 @@ public class RegistrationTest {
     @WithMockUser(username = "aowss@yahoo.com", password = "My-Passw0rd")
     public void retrieveUserById() throws Exception {
 
-        JsonObject user = Json.createObjectBuilder()
-            .add("firstName",       "Aowss")
-            .add("lastName",        "Ibrahim")
-            .add("email",           "aowss@yahoo.com")
-            .add("password",        "My-Passw0rd")
-            .add("matchingPassword","My-Passw0rd")
-            .build();
+        JsonObject user = Json.createObjectBuilder().
+            add("firstName",       "Aowss").
+            add("lastName",        "Ibrahim").
+            add("email",           "aowss@yahoo.com").
+            add("password",        "My-Passw0rd").
+            add("matchingPassword","My-Passw0rd").
+            build();
 
         MvcResult createResult = mockMvc.
             perform(
                 post("/user").
                 contentType(MediaType.APPLICATION_JSON).
                 content(user.toString())
-            ).andReturn();
+            ).
+            andReturn();
 
         ResultActions result = mockMvc.
             perform(asyncDispatch(createResult));
@@ -70,13 +66,14 @@ public class RegistrationTest {
             perform(
                 get(locationHeader).
                 accept(MediaType.APPLICATION_JSON)
-            ).andReturn();
+            ).
+            andReturn();
 
         mockMvc.
             perform(asyncDispatch(retrieveResult)).
-            andExpect(status().isOk())
-            .andExpect(content().contentType(jsonMediaType))
-            .andExpect(jsonPath("email", is("aowss@yahoo.com")));
+            andExpect(status().isOk()).
+            andExpect(content().contentType(jsonMediaType)).
+            andExpect(jsonPath("email", is("aowss@yahoo.com")));
 
     }
 
