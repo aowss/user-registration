@@ -2,6 +2,7 @@ package api.aowss.com.resources;
 
 import api.aowss.com.activities.CreateUser;
 import api.aowss.com.activities.RetrieveUser;
+import api.aowss.com.model.AccountStatus;
 import api.aowss.com.representations.UserSummary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ public class UserResource {
 
     @Inject
     CreateUser createUserActivity;
+
     @Inject
     RetrieveUser retrieveUserActivity;
 
@@ -50,6 +52,14 @@ public class UserResource {
         return retrieveUserActivity.
             retrieveUser(userId).
             thenApply(userRepresentation -> ResponseEntity.ok(userRepresentation));
+    }
+
+    @RequestMapping(path = "/{userId}?status={status}&token={tokenId}", method = RequestMethod.PUT)
+    @ResponseBody
+    public CompletableFuture<ResponseEntity<Object>> changeStatus(@PathVariable("userId") @NotNull Long userId, @RequestParam("status") @NotNull AccountStatus status, @RequestParam("tokenId") @NotNull String tokenId) {
+        return retrieveUserActivity.
+                retrieveUser(userId).
+                thenApply(userRepresentation -> ResponseEntity.ok(userRepresentation));
     }
 
 }

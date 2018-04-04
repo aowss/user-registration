@@ -1,0 +1,36 @@
+:source-highlighter: highlightjs
+:toc2:
+:toclevels: 2
+:imagesdir: ./img
+:Revision: version 1.0.0
+
+= User Registration
+
+== Account States
+
+[plantuml, states, svg]
+....
+@startuml
+
+[*] --> CREATED : ""POST /user""
+note left of CREATED : email with activation {token} sent to user 
+
+CREATED -> ACTIVE : ""PUT /user/status"" \n""{ "status" : "Active", "token" : "{token}" }""
+CREATED --> [*] : ""DELETE /user/{id}""
+
+ACTIVE --> LOCKED : More than a given number of failed authentication in a row
+note right of LOCKED : email with unlock {token} sent to user 
+LOCKED --> ACTIVE : ""PUT /user/status"" \n""{ "status" : "Active", "token" : "{token}" }""
+LOCKED --> EXPIRED : Account locked for a given period of time
+
+ACTIVE --> INACTIVE : ""PUT /user/status"" \n""{ "status" : "Inactive" }""
+INACTIVE -> ACTIVE : ""PUT /user/status"" \n""{ "status" : "Active" }""
+INACTIVE --> EXPIRED : Account inactive for a given period of time
+
+CREATED --> EXPIRED : Account not activated within a given period of time
+note right of EXPIRED : email with unlock {token} sent to user 
+EXPIRED --> CREATED : ""PUT /user/status"" \n""{ "status" : "Active", "token" : "{token}" }""
+EXPIRED --> [*] : After a given period of time
+
+@enduml
+....

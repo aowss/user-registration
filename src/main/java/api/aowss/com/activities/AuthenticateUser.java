@@ -1,8 +1,7 @@
 package api.aowss.com.activities;
 
-import api.aowss.com.model.User;
-import api.aowss.com.model.exceptions.UserAlreadyExistsException;
-import api.aowss.com.representations.UserSummary;
+import api.aowss.com.model.AccountStatus;
+import api.aowss.com.model.exceptions.InvalidStatusException;
 import api.aowss.com.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +10,6 @@ import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import java.util.concurrent.CompletableFuture;
-
-import static api.aowss.com.activities.FromRepresentation.toUser;
 
 @Component
 public class AuthenticateUser {
@@ -27,7 +24,7 @@ public class AuthenticateUser {
 
     public CompletableFuture<Boolean> authenticateUser(String email, String password) {
         return userService.retrieveUserByEmail(email).thenApply(user -> {
-            //if (user.getPassword().equals(passwordEncoder.encode(password))) return true;
+            if (!user.getStatus().equals(AccountStatus.ACTIVE)) throw new InvalidStatusException(user.getStatus());
             if (passwordEncoder.matches(password, user.getPassword())) return true;
             return false;
         });
