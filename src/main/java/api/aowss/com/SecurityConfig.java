@@ -1,5 +1,6 @@
 package api.aowss.com;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,6 +20,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Inject
     private CustomAuthenticationProvider authProvider;
 
+    @Inject
+    private CustomAuthenticationEntryPoint authenticationEntryPoint;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authProvider);
@@ -29,10 +33,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.
             authorizeRequests().
                 //failureHandler(authenticationFailureHandler()).
-                antMatchers(HttpMethod.POST, "/user").permitAll().
+                        antMatchers(HttpMethod.POST, "/user").permitAll().
                 anyRequest().fullyAuthenticated().
             and().
-                httpBasic().
+                httpBasic().authenticationEntryPoint(authenticationEntryPoint).
             and().
                 headers().cacheControl().disable(). //  This is needed to allow controllers to set the cache control headers
 //            and().

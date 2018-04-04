@@ -99,8 +99,8 @@ public class ExceptionTest {
             perform(
                 get("/user/0").with(httpBasic("aowss@yahoo.com", "wrong")).
                 contentType(MediaType.APPLICATION_JSON)
-            ).
-            andExpect(status().isUnauthorized());
+            ).andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("code", is("WRONG_CREDENTIALS")));
 
     }
 
