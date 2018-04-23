@@ -48,7 +48,7 @@ public class ExceptionTest {
 
     private static final Logger logger = LoggerFactory.getLogger(ExceptionTest.class);
 
-    @Mock
+    @MockBean
     private UserService mockService;
 
     @Autowired
@@ -94,6 +94,10 @@ public class ExceptionTest {
 
     @Test
     public void invalidCredentials() throws Exception {
+
+        CompletableFuture<User> completableFuture = new CompletableFuture<>();
+        completableFuture.complete(new User());
+        when(mockService.retrieveUserByEmail("aowss@yahoo.com")).thenReturn(completableFuture);
 
         mockMvc.
             perform(
