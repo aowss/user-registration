@@ -24,8 +24,9 @@ public class ErrorHandler {
 
     private static String authenticationFailureString() {
         JsonObject errorObj = Json.createObjectBuilder()
-                .add("code",       "WRONG_CREDENTIALS")
+                .add("code", "WRONG_CREDENTIALS")
                 .build();
         return errorObj.toString();
     }
+
 }

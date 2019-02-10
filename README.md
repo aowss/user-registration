@@ -3,6 +3,19 @@
 This micro service handles, as its name implies, user registration.  
 It is inspired by http://www.baeldung.com/spring-security-registration.
 
+## Pre-requisites
+
+* [Maven](https://maven.apache.org)
+
+The artifact is built using [Maven](https://maven.apache.org).  
+
+If you want to use the provided [`.mvn` folder](./.mvn) to specify project-specific settings, you need version `3.3.1` or above.
+
+* [Java](https://www.oracle.com/technetwork/java/javase/overview/index.html) 8 or above
+
+## Build
+
+
 ## Run
 
 ### Command Line

@@ -1,6 +1,5 @@
 package api.aowss.com.services;
 
-import api.aowss.com.model.AccountStatus;
 import api.aowss.com.model.User;
 import api.aowss.com.model.exceptions.UserAlreadyExistsException;
 import api.aowss.com.model.exceptions.UserNotFoundException;

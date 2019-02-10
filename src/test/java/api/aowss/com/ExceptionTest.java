@@ -1,13 +1,17 @@
 package api.aowss.com;
 
-import api.aowss.com.model.User;
 import api.aowss.com.model.exceptions.UserAlreadyExistsException;
 import api.aowss.com.model.exceptions.UserNotFoundException;
 import api.aowss.com.services.UserService;
+import api.aowss.com.services.UserServiceImpl;
+import api.aowss.com.store.UserStore;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +26,15 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObject;
 import java.nio.charset.Charset;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
 import static api.aowss.com.Utils.perform;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.when;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
@@ -48,12 +51,13 @@ public class ExceptionTest {
 
     private static final Logger logger = LoggerFactory.getLogger(ExceptionTest.class);
 
-    @Mock
-    private UserService mockService;
+    @MockBean
+    private UserServiceImpl mockService;
 
-    @Autowired
+    @Inject
     private WebApplicationContext context;
 
+    @Inject
     private MockMvc mockMvc;
 
     private MediaType jsonMediaType = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
@@ -94,6 +98,8 @@ public class ExceptionTest {
 
     @Test
     public void invalidCredentials() throws Exception {
+
+        when(mockService.retrieveUserByEmail(any())).thenCallRealMethod();
 
         mockMvc.
             perform(
